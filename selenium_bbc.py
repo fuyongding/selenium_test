@@ -24,6 +24,7 @@ try:
 
     print("\n-----------------------------------------------------------------------------------------------------------------\n")
 
+    print("Current most read: ")
     for i in range(10):
         list_element = driver.find_element(By.XPATH, f"//li[@data-entityid='most-popular-read-{i+1}']")
         #print(list_element.get_attribute('outerHTML'))
@@ -37,9 +38,8 @@ try:
 except Exception as e:
     print(e)
 finally:
-    #time.sleep(5) #idk why need this
     pid = driver.service.process.pid
-    os.system(f'taskkill /PID {pid} /F')
+    #os.system(f'taskkill /PID {pid} /F') # or else chrome processes will accumulate
     driver.quit()  
 
 
