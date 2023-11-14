@@ -2,6 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait 
+from selenium.webdriver.support import expected_conditions as EC 
 
 chrome_options = Options()
 chrome_options.add_argument('start-maximized')
@@ -12,10 +14,13 @@ if company_ticker != '':
     webpage = f"https://sg.finance.yahoo.com/quote/{company_ticker}"
     driver.get(webpage)
 
-    driver.implicitly_wait(2)
+    #driver.implicitly_wait(2)
 
     try:
-        stock_price_node = driver.find_element(By.XPATH, f'//fin-streamer[@data-symbol="{company_ticker}"][@data-field="regularMarketPrice"]')
+        stock_price_node = WebDriverWait(driver, 10).until( 
+            EC.presence_of_element_located((By.XPATH, f'//fin-streamer[@data-symbol="{company_ticker}"][@data-field="regularMarketPrice"]')) 
+        )
+        #stock_price_node = driver.find_element(By.XPATH, f'//fin-streamer[@data-symbol="{company_ticker}"][@data-field="regularMarketPrice"]')
         stock_price = stock_price_node.get_attribute('innerText').strip()
 
         currency_node = driver.find_element(By.XPATH, "//span[contains(text(), 'Currency in')]") # Find the span element that contains the text "Currency in"
